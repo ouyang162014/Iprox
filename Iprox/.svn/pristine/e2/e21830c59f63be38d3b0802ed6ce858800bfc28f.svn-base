@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- xiezhaodong -->
+<mapper namespace="cn.cqupt.iprox.dao.SubProjectDao">
+
+<!-- 根据（物种，组织，细胞类型，疾病类型）查询该类型 -->
+	<select id="getSTTDNameBySTTD" resultType="cn.cqupt.iprox.model.po.SubProject" parameterType="cn.cqupt.iprox.model.vo.STTDType">
+		SELECT DISTINCT ${type}
+			FROM t_subproject 
+			limit #{rows},20 ; 
+			
+		<!-- SELECT subid,pid,species,subtitle,tissue,celltype,disease
+			FROM t_subproject 
+			GROUP BY #{type} 
+			LIMIT #{rows},20;  -->
+		<!-- SELECT DISTINCT 
+			<choose>
+				<when test="species!=null"> species</when>
+				<when test="tissue!=null"> tissue</when>
+				<when test="cellType!=null"> cellType</when>
+				<when test="disease!=null"> disease</when>
+			</choose>
+			FROM t_subproject 
+			limit #{rows},20 ; -->
+	</select>
+	
+<!-- 根据（物种，组织，细胞类型，疾病类型）查询该类型总数 -->
+	<select id="getSTTDNameBySTTDCount" resultType="java.lang.Integer" parameterType="cn.cqupt.iprox.model.vo.STTDType">
+		SELECT COUNT(DISTINCT ${type}) FROM t_subproject ;
+		 
+		<!-- SELECT COUNT(*) FROM 
+			(SELECT t1.subid FROM t_subproject t1 GROUP BY 
+			<choose>
+				<when test="species!=null"> species</when>
+				<when test="tissue!=null"> tissue</when>
+				<when test="cellType!=null"> cellType</when>
+				<when test="disease!=null"> disease</when>
+			</choose>
+			) 
+			AS total; --> 
+	</select>
+	
+	
+	<resultMap type="cn.cqupt.iprox.model.vo.ReturnDetail" id="subProjectAndGroup" autoMapping="true">
+		<association property="group" javaType="cn.cqupt.iprox.model.po.Group">
+			<id column="gid" property="gid"/>
+			<result column="groupname" property="groupName"/>
+		</association>
+		<association property="subProject" javaType="cn.cqupt.iprox.model.po.SubProject" >
+			<id column="subid" property="subid"/>
+			<result column="subidentifyid" property="subidentifyid"/>
+			<result column="subtitle" property="subtitle"/>
+			<result column="status" property="status"/>
+			<result column="subtag" property="subtag"/>
+			<result column="subdescription" property="subdescription"/>
+			<result column="species" property="species"/>
+			<result column="tissue" property="tissue"/>
+			<result column="celltype" property="celltype"/>
+			<result column="disease" property="disease"/>
+			<result column="quantitation" property="quantitation"/>
+			<result column="digestion" property="digestion"/>
+			<result column="otherinformation" property="otherinformation"/>
+			<result column="subsummary" property="subsummary"/>
+			<result column="sdtype" property="sdtype"/>
+			<result column="sdversion" property="sdversion"/>
+			<result column="ddtype" property="ddtype"/>
+			<result column="quality" property="quality"/>
+			<result column="fragment_cv" property="fragment_cv"/>
+			<result column="fragment_accession" property="fragment_accession"/>
+			<result column="fragment_name" property="fragment_name"/>
+			<result column="fragment_value" property="fragment_value"/>
+			<result column="peptide_cv" property="peptide_cv"/>
+			<result column="peptide_accession" property="peptide_accession"/>
+			<result column="peptide_name" property="peptide_name"/>
+			<result column="peptide_value" property="peptide_value"/>
+			<result column="cleavages_cv" property="cleavages_cv"/>
+			<result column="cleavages_accession" property="cleavages_accession"/>
+			<result column="cleavages_name" property="cleavages_name"/>
+			<result column="cleavages_value" property="cleavages_value"/>
+			<result column="softwarename" property="softwarename"/>
+			<result column="softwareversion" property="softwareversion"/>
+		</association>
+	</resultMap>
+	<!-- 根据Id查询子项目详情（关联组信息） -->
+	<select id="getSubProjectById" resultMap="subProjectAndGroup" parameterType="int">
+		 SELECT t1.subid,t1.subidentifyid,t1.subtitle,t1.status,t1.subtag,
+			t1.subdescription,t1.species,t1.tissue,t1.celltype,t1.disease,
+			t1.quantitation,t1.digestion,t1.otherinformation,t1.subsummary,
+			t1.sdtype,t1.sdversion,t1.ddtype,t1.quality,
+			t1.fragment_cv,t1.fragment_accession,t1.fragment_name,t1.fragment_value,
+			t1.peptide_cv,t1.peptide_accession,t1.peptide_name,t1.peptide_value,
+			t1.cleavages_cv,t1.cleavages_accession,t1.cleavages_name,t1.cleavages_value,
+			t1.softwarename,t1.softwareversion,
+			t3.gid,t3.groupname
+			
+			FROM t_subproject t1 
+			LEFT JOIN subproject_group t2 ON (t1.subid = t2.subid)
+			LEFT JOIN t_group t3 ON (t3.gid = t2.gid)
+			WHERE t1.subid=#{subId}
+	</select>
+	
+	<resultMap type="cn.cqupt.iprox.model.vo.SubProjectDetail" id="subProjectDetail" autoMapping="true">
+		<association property="mssource" javaType="cn.cqupt.iprox.model.po.Mssource">
+			<id column="mssource_id" property="id"/>
+			<result column="mssource_cv" property="cv"/>
+			<result column="mssource_accession" property="accession"/>
+			<result column="mssource_name" property="name"/>
+			<result column="mssource_value" property="value"/>
+		</association>
+		<association property="msanalyer" javaType="cn.cqupt.iprox.model.po.Msanalyer">
+			<id column="msanalyer_id" property="id"/>
+			<result column="msanalyer_cv" property="cv"/>
+			<result column="msanalyer_accession" property="accession"/>
+			<result column="msanalyer_name" property="name"/>
+			<result column="msanalyer_value" property="value"/>
+		</association>
+		<association property="msdetector" javaType="cn.cqupt.iprox.model.po.Msdetector">
+			<id column="msdetector_id" property="id"/>
+			<result column="msdetector_cv" property="cv"/>
+			<result column="msdetector_accession" property="accession"/>
+			<result column="msdetector_name" property="name"/>
+			<result column="msdetector_value" property="value"/>
+		</association>
+		<association property="growth" javaType="cn.cqupt.iprox.model.po.Growth">
+			<id column="growth_id" property="id"/>
+			<result column="growth_cv" property="cv"/>
+			<result column="growth_accession" property="accession"/>
+			<result column="growth_name" property="name"/>
+			<result column="growth_value" property="value"/>
+		</association>
+		<association property="treatment" javaType="cn.cqupt.iprox.model.po.Treatment">
+			<id column="treatment_id" property="id"/>
+			<result column="treatment_cv" property="cv"/>
+			<result column="treatment_accession" property="accession"/>
+			<result column="treatment_name" property="name"/>
+			<result column="treatment_value" property="value"/>
+		</association>
+		<association property="digestion" javaType="cn.cqupt.iprox.model.po.Digestion">
+			<id column="digestion_id" property="id"/>
+			<result column="digestion_cv" property="cv"/>
+			<result column="digestion_accession" property="accession"/>
+			<result column="digestion_name" property="name"/>
+			<result column="digestion_value" property="value"/>
+		</association>
+		<association property="extraction" javaType="cn.cqupt.iprox.model.po.Extraction">
+			<id column="extraction_id" property="id"/>
+			<result column="extraction_cv" property="cv"/>
+			<result column="extraction_accession" property="accession"/>
+			<result column="extraction_name" property="name"/>
+			<result column="extraction_value" property="value"/>
+		</association>
+		<association property="acquisition" javaType="cn.cqupt.iprox.model.po.Acquisition">
+			<id column="acquisition_id" property="id"/>
+			<result column="acquisition_cv" property="cv"/>
+			<result column="acquisition_accession" property="accession"/>
+			<result column="acquisition_name" property="name"/>
+			<result column="acquisition_value" property="value"/>
+		</association>
+		<association property="separation" javaType="cn.cqupt.iprox.model.po.Separation">
+			<id column="separation_id" property="id"/>
+			<result column="separation_cv" property="cv"/>
+			<result column="separation_accession" property="accession"/>
+			<result column="separation_name" property="name"/>
+			<result column="separation_value" property="value"/>
+		</association>
+		<association property="moreinfor" javaType="cn.cqupt.iprox.model.po.Moreinfor">
+			<id column="moreinfor_id" property="id"/>
+			<result column="moreinfor_cv" property="cv"/>
+			<result column="moreinfor_accession" property="accession"/>
+			<result column="moreinfor_name" property="name"/>
+			<result column="moreinfor_value" property="value"/>
+		</association>
+	</resultMap>
+	
+	<!-- 根据Id查询子项目详情（关联其他表，质谱仪信息，实验信息） -->
+	<select id="getSubProjectDetailById" resultMap="subProjectDetail" parameterType="int">
+		SELECT t1.subid,
+			t2.cv AS 'mssource_cv',t2.accession AS 'mssource_accession',t2.name AS 'mssource_name',t2.value AS 'mssource_value',t2.id AS 'mssource_id',
+			t3.cv AS 'msanalyer_cv',t3.accession AS 'msanalyer_accession',t3.name AS 'msanalyer_name',t3.value AS 'msanalyer_value',t3.id AS 'msanalyer_id',
+			t4.cv AS 'msdetector_cv',t4.accession AS 'msdetector_accession',t4.name AS 'msdetector_name',t4.value AS 'msdetector_value',t4.id AS 'msdetector_id',
+			t5.cv AS 'growth_cv',t5.accession AS 'growth_accession',t5.name AS 'growth_name',t5.value AS 'growth_value',t5.id AS 'growth_value_id',
+			t6.cv AS 'treatment_cv',t6.accession AS 'treatment_accession',t6.name AS 'treatment_name',t6.value AS 'treatment_value',t6.id AS 'treatment_id',
+			t7.cv AS 'digestion_cv',t7.accession AS 'digestion_accession',t7.name AS 'digestion_name',t7.value AS 'digestion_value',t7.id AS 'digestion_id',
+			t8.cv AS 'extraction_cv',t8.accession AS 'extraction_accession',t8.name AS 'extraction_name',t8.value AS 'extraction_value',t8.id AS 'extraction_id',
+			t9.cv AS 'acquisition_cv',t9.accession AS 'acquisition_accession',t9.name AS 'acquisition_name',t9.value AS 'acquisition_value',t9.id AS 'acquisition_id',
+			t10.cv AS 'separation_cv',t10.accession AS 'separation_accession',t10.name AS 'separation_name',t10.value AS 'separation_value',t10.id AS 'separation_id',
+			t11.cv AS 'moreinfor_cv',t11.accession AS 'moreinfor_accession',t11.name AS 'moreinfor_name',t11.value AS 'moreinfor_value',t11.id AS 'moreinfor_id'
+			FROM t_subproject t1
+			left JOIN mssource t2 on (t2.subid = t1.subid)
+			left join msanalyer t3 on (t3.subid = t1.subid)
+			left join msdetector t4 on (t4.subid = t1.subid)
+			left join growth t5 on (t5.subid = t1.subid)
+			LEFT JOIN treatment t6 ON (t6.subid = t1.subid)
+			LEFT JOIN digestion t7 ON (t7.subid = t1.subid)
+			LEFT JOIN extraction t8 ON (t8.subid = t1.subid)
+			LEFT JOIN acquisition t9 ON (t9.subid = t1.subid)
+			LEFT JOIN separation t10 ON (t10.subid = t1.subid)
+			LEFT JOIN moreinfor t11 ON (t11.subid = t1.subid)
+			where t1.subid=#{subId}
+	</select>
+	
+	
+	
+	
+	
+	<!-- 根据项目id查询该项目下子项目的数量  -->
+ 	<select id="getSubProjectCountByPid" resultType="int" parameterType="int">
+		SELECT count(*) 
+		FROM t_project t1 
+		LEFT JOIN t_subproject t2 ON (t1.pid=t2.pid)
+		WHERE t1.pid=#{pid}
+	</select> 
+	
+	
+	
+	<resultMap type="cn.cqupt.iprox.model.vo.ReturnDetail" id="subProjectByProjectId" autoMapping="true">
+		<association property="subProject" javaType="cn.cqupt.iprox.model.po.SubProject">
+			<id column="subid" property="subid"/>
+			<result column="subtitle" property="subtitle"/>
+			<result column="species" property="species"/>
+			<result column="tissue" property="tissue"/>
+			<result column="celltype" property="celltype"/>
+			<result column="goterm" property="goterm"/>
+			<result column="disease" property="disease"/>
+			<result column="details" property="details"/>
+		</association>
+	</resultMap>
+	
+	<!-- 根据项目id分页查询该项目下每个子项目信息 --> 
+ 	<select id="getSubProjectByPid" resultMap="subProjectByProjectId" parameterType="java.util.Map">
+	SELECT t2.subid,t2.subtitle,t2.species,t2.tissue,t2.celltype,t2.goterm,t2.disease,t2.details,
+		COUNT(DISTINCT t3.protein_id) AS proteinCount,
+		COUNT(DISTINCT t3.peptide_id) AS peptideCount,
+		COUNT(DISTINCT t3.spectrum_id) AS spectrumCount
+		FROM t_project t1 
+		LEFT JOIN t_subproject t2 ON(t1.pid=t2.pid)
+		LEFT JOIN t_pep_pro_psm_sub t3 ON(t2.subid=t3.subid)
+		where t1.pid=#{pid}
+		GROUP BY t3.subid
+		limit #{rows},20
+	</select> 
+	
+
+	
+	
+
+</mapper>

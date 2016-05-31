@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="Iprox">
+    <output-path>$PROJECT_DIR$/classes/artifacts/Iprox</output-path>
+    <root id="archive" name="Iprox.war">
+      <element id="artifact" artifact-name="Iprox:war exploded" />
+    </root>
+  </artifact>
+</component>

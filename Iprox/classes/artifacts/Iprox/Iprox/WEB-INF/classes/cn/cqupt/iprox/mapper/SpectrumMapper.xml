@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="cn.cqupt.iprox.dao.SpectrumDao">
+
+	<resultMap type="cn.cqupt.iprox.model.vo.ReturnDetail" id="spectrumSubProject" autoMapping="true">
+		<association property="spectrum" javaType="cn.cqupt.iprox.model.po.Spectrum">
+			<id column="spectrum_id" property="spectrum_id"/>
+			<result column="precursor_m_z" property="precursor_m_z"/>
+			<result column="ms_level" property="ms_level"/>
+			<result column="identified" property="identified"/>
+			<result column="charge" property="charge"/>
+			<result column="sum_of_intensity" property="sum_of_intensity"/>
+			<result column="peaks" property="peaks"/>
+			<result column="precursor_Intensity" property="precursor_Intensity"/>
+		</association>
+		<association property="subProject" javaType="cn.cqupt.iprox.model.po.SubProject">
+			<id column="subid" property="subid"/>
+			<result column="subtitle" property="subtitle"/>
+		</association>
+	</resultMap>
+	<!-- 根据子项目查询质谱图信息列表 -->
+	<select id="getSpectrumBySubId" resultMap="spectrumSubProject" parameterType="java.util.Map">
+		select t1.spectrum_id,t1.precursor_m_z,t1.`ms_level`,t1.`identified`,t1.`charge`,
+			t1.`sum_of_intensity`,t1.`peaks`,t1.precursor_Intensity,t3.`subid`,t3.`subtitle`
+		 	from t_spectrum t1
+		 	left join t_pep_pro_psm_sub t2 on (t1.`spectrum_id`=t2.`spectrum_id`)
+		 	left join `t_subproject` t3 on (t2.`subid`=t3.`subid`)
+		 	where t3.subid=#{subId}
+		 	limit #{rows},20;
+	</select>
+	<!-- 根据子项目查询质谱图的数量 -->
+	<select id="getSpectrumBySubIdCount" resultType="int" parameterType="int">
+		select count(*) from t_spectrum t1
+		 	left join t_pep_pro_psm_sub t2 on (t1.`spectrum_id`=t2.`spectrum_id`)
+		 	left join `t_subproject` t3 on (t2.`subid`=t3.`subid`)
+		 	where t3.subid=#{subId};
+	</select>
+	
+	<!-- 根据肽段id得到质谱图的图的路径 -->
+	<select id="getSpectrumPathByPeptideId" resultType="cn.cqupt.iprox.model.po.Spectrum" parameterType="int">
+	select distinct t1.path
+			from `t_spectrum` t1
+			left join `t_pep_pro_psm_sub` t2 ON (t1.`spectrum_id`=t2.`spectrum_id`)
+			left join `t_peptide` t3 ON (t2.`peptide_id`=t3.`peptide_id`)
+			where t3.`peptide_id`=#{peptide_id};
+	</select>
+	
+	
+	<!--根据子项目查询质谱图peaks (降序排列) -->
+	<select id="getPeaksBySubId" resultType="int" parameterType="int">
+		SELECT t2.peaks
+		FROM (SELECT DISTINCT spectrum_id,subid FROM t_pep_pro_psm_sub)t1 LEFT JOIN t_spectrum t2 ON (t1.spectrum_id=t2.spectrum_id)
+		WHERE t1.subid=#{subid}
+		ORDER BY t2.peaks DESC
+	</select>
+	<!--在子项目下将质谱图按照charge的数量分类（iditified为true），得到每种数量charge的值和数量  -->
+	<select id="getChargeInfoBySubId" parameterType="int" resultType="java.util.HashMap">
+		SELECT t2.charge,COUNT(*) as number
+		FROM (SELECT DISTINCT spectrum_id,subid FROM t_pep_pro_psm_sub)t1 LEFT JOIN t_spectrum t2 ON(t1.spectrum_id=t2.spectrum_id)
+		WHERE   t1.subid=#{subid} AND t2.identified=1
+		GROUP BY t2.charge
+	</select>
+	
+	<select id="getSpectrumPathById" parameterType="int" resultType="cn.cqupt.iprox.model.po.Spectrum">
+		SELECT path
+		FROM t_spectrum
+		WHERE spectrum_id=#{spectrumId}
+	</select>
+	
+</mapper>

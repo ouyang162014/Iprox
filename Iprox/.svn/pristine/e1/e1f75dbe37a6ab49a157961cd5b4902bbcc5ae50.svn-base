@@ -1,0 +1,62 @@
+package cn.cqupt.iprox.model.vo;
+
+import java.util.List;
+
+/**
+ * 从文件中读出的谱图的图信息详情
+ * 即Spectrum中的path属性对应的文件
+ * @author Cbillow
+ *
+ */
+public class SpectrumView {
+
+	private float x ;         //质谱图的图信息的x轴
+	private int y ;			//质谱图的图信息的y轴
+	private List<String> infos ; //质谱图的图的信息
+	private String tag ;	//质谱图的图信息标签
+	
+	
+	
+	public SpectrumView(float x, int y, List<String> infos, String tag) {
+		this.x = x;
+		this.y = y;
+		this.infos = infos;
+		this.tag = tag;
+	}
+
+	public SpectrumView() {
+	}
+	
+	public List<String> getInfos() {
+		return infos;
+	}
+	public void setInfos(List<String> infos) {
+		this.infos = infos;
+	}
+	public float getX() {
+		return x;
+	}
+	public void setX(float x) {
+		this.x = x;
+	}
+	public int getY() {
+		return y;
+	}
+	public void setY(int y) {
+		this.y = y;
+	}
+	public String getTag() {
+		return tag;
+	}
+	public void setTag(String tag) {
+		this.tag = tag;
+	}
+
+	@Override
+	public String toString() {
+		return "SpectrumDetail [x=" + x + ", y=" + y + ", infos=" + infos
+				+ ", tag=" + tag + "]";
+	}
+	
+	
+}

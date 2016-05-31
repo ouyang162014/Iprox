@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="cn.cqupt.iprox.dao.ProteinDao">
+	
+	<resultMap type="cn.cqupt.iprox.model.vo.ReturnDetail" id="proteinSubProject" autoMapping="true">
+		<association property="protein" javaType="cn.cqupt.iprox.model.po.Protein">
+			<id column="protein_id" property="protein_id"/>
+			<id column="name" property="name"/>
+			<result column="protein" property="protein"/>
+			<result column="status" property="status"/>
+			<result column="coverage" property="coverage"/>
+			<result column="pi" property="pi"/>
+			<result column="threshold" property="threshold"/>
+			<result column="peptides" property="peptides"/>
+			<result column="distinct_peptides" property="distinct_peptides"/>
+			<result column="ptms" property="ptms"/>
+			<result column="group_id" property="group_id"/>
+			<result column="psms" property="psms"/>
+		</association>
+		<association property="subProject" javaType="cn.cqupt.iprox.model.po.SubProject">
+			<id column="subid" property="subid"/>
+			<result column="subtitle" property="subtitle"/>
+		</association>
+	</resultMap>
+	<!-- 可能会根据蛋白质组分组，点开一个蛋白质组，显示该组下所有蛋白质 -->
+	<!-- 蛋白质组数据库中尚未确定 -->
+	<!-- 根据子项目id查询分页的蛋白质 -->
+	<select id="getProteinBySubId" resultMap="proteinSubProject" parameterType="java.util.Map">
+		SELECT DISTINCT (t3.subid),t3.subtitle,t1.*
+			FROM t_protein t1 
+			LEFT JOIN t_pep_pro_psm_sub t2 ON (t2.protein_id=t1.protein_id)
+			LEFT JOIN t_subproject t3 ON (t3.subid=t2.subid)
+			WHERE t3.subid=#{subId}
+			LIMIT #{rows},20
+	</select>
+	<!--  根据子项目id查询 一共有多少蛋白质，来计算一共有多少页 -->
+	<select id="getProteinCountBySubId" resultType="int" parameterType="int">
+		SELECT COUNT(DISTINCT protein) 
+			FROM t_protein t1 
+			LEFT JOIN t_pep_pro_psm_sub t2 ON (t2.protein_id=t1.protein_id)
+			LEFT JOIN t_subproject t3 ON (t3.subid=t2.subid) 
+			WHERE t3.subid=#{rows}	
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<!-- 查询 一共有多少蛋白质，来计算一共有多少页 -->
+	<select id="getProteinCount" resultType="int">
+		select count(*) protein_id from t_protein
+	</select>
+	<!-- 查询分页的蛋白质数量 -->
+	<select id="getProteinRows" resultType="cn.cqupt.iprox.model.po.Protein"
+		parameterType="int">
+		select
+			protein,status,coverage,pi,threshold,peptides,distinct_peptides,ptms,protein_id
+			from t_protein limit #{rows},20 
+	</select>
+	
+	
+	
+		
+	<resultMap type="cn.cqupt.iprox.model.vo.ReturnDetail" id="proteinAndCountSubProject" autoMapping="true">
+		<association property="protein" javaType="cn.cqupt.iprox.model.po.Protein">
+			<id column="protein_id" property="protein_id"/>
+		</association>
+	</resultMap>
+	
+	
+	
+	<!--根据子项目查询蛋白质包含的肽段数目并按此数目分类，得到每种数目的蛋白质数目  -->
+	<select id="getPeptideCountOfProteinBySubId" resultType="String" parameterType="int">
+		SELECT t2.peptides
+		FROM
+		(SELECT DISTINCT subid,protein_id
+		FROM t_pep_pro_psm_sub)t1 LEFT JOIN t_protein t2 ON(t1.protein_id=t2.protein_id)
+		where subid=#{subid}
+	</select>
+ 
+</mapper>

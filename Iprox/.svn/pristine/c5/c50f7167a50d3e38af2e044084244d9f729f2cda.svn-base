@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>iprox</title>
+<link type="image/vnd.microsoft.icon" rel="shortcut icon" href="imgs/iprox.ico"/>
+<link type="text/css" rel="stylesheet" href="css/reset.css"/>
+<link type="text/css" rel="stylesheet" href="css/iProx_main.css"/>
+</head>
+<body>
+	<div id="header" class="comWidth">
+    	<ul class="nav clearfix" id="mainav">
+        	<li><a href="iProx_home.html" class="current">Home</a></li>
+        	<li><a href="iProx_browse.html">Browse</a></li>
+        	<li><a href="#">Search</a></li>
+        	<li><a href="#">Submit</a></li>
+        	<li><a href="#">Log In/Out</a></li>
+        	<li><a href="#">Help</a></li>
+        </ul>
+        <h1>integrated Proteome resources</h1>
+    </div>
+    <div id="content_home" class="comWidth clearfix">
+        <div class="con_left">
+        	<ul id="secnav">
+            	<li><a href="iProx_home.html" class="active">Home</a></li>
+            	<li><a href="iProx_browse.html">Browse</a></li>
+            	<li><a href="#">Search</a></li>
+            	<li><a href="#">Submit</a></li>
+            	<li><a href="#">Log in</a></li>
+            	<li><a href="#">help</a></li>
+            </ul>
+        </div>
+        <div class="con_right">
+        	<h2>Introduction</h2>
+            <p>The iProX is an integrated Proteome resources center in China. Currently, iProX is composed of a proteomics database and an experiment data submission system.</p>
+            <h2>Basic Statistics</h2>	
+            <ul class="pointlist">
+            	<h3>The iProX database currently contains:</h3>
+                <li><a href="#"><span></span><span>projects</span></a></li>
+                <li><span></span><span>Experiments</span></li>
+                <li><span></span><span>Data files</span></li>
+                <li><span></span><span>Identified Proteins</span></li>
+            </ul>
+            <h2>The latest submitted datasets</h2>
+            <div class="tablediv">
+              <table>
+                  <thead>
+                      <tr>
+                          <td width="352px">Project</td>
+                          <td width="170px">Submitter</td>
+                          <td width="230px">Institution</td>
+                          <td width="100px">Date</td>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr>
+                          <td>Project</td>
+                          <td>Submitter</td>
+                          <td>Institution</td>
+                          <td>2013.04.09</td>
+                      </tr>
+                      <tr>
+                          <td>Project</td>
+                          <td>Submitter</td>
+                          <td>Institution</td>
+                          <td>2013.04.09</td>
+                      </tr>
+                      <tr>
+                          <td>Project</td>
+                          <td>Submitter</td>
+                          <td>Institution</td>
+                          <td>2013.04.09</td>
+                      </tr>
+                      <tr>
+                          <td>Project</td>
+                          <td>Submitter</td>
+                          <td>Institution</td>
+                          <td>2013.04.09</td>
+                      </tr>
+                      <tr>
+                          <td>Project</td>
+                          <td>Submitter</td>
+                          <td>Institution</td>
+                          <td>2013.04.09</td>
+                      </tr>
+                 </tbody>
+              </table>
+            </div>
+            <h2>Acknowledgements</h2>
+            <div class="clearfix">
+            	<h4>iPROX is developed based on PRIDE code:</h4>
+                <p>Vizcaíno JA, Côté RG, Csordas A, Dianes JA, Fabregat A, Foster JM, Griss J, Alpi E, Birim M, Contell J, O¿Kelly G, Schoenegger A, Ovelleiro D, Pérez-Riverol Y, Reisinger F, Ríos D, Wang R, Hermjakob H. The Proteomics Identifications (PRIDE) database and associated tools: status in 2013. Nucleic Acids Res. 2013 Jan;41(Database issue):D1063-1069.PubMed PMID: <a href="http://www.ncbi.nlm.nih.gov/pubmed?term=23203882" id="clickahrefc">23203882</a>.</p>
+            <ul id="picList">
+                	<li id="litPic"><a href="http://www.bmi.ac.cn/" target="_blank"><img src="imgs/logo_birm.png" alt="logo_birm"/></a></li>
+                	<li><a href="http://www.bprc.ac.cn/" target="_blank"><img src="imgs/logo_bprc.png" alt="logo_bprc"/></a></li>
+                	<li><a href="http://www.cqupt.edu.cn/" target="_blank"><img src="imgs/logo_cqupt.png" alt="logo_cqupt"/></a></li>
+                	<li><a href="http://222.240.161.178/" target="_blank"><img src="imgs/logo_nscc.png" alt="logo_nscc"/></a></li>
+                	<li><a href="http://www.tilsi.org/" target="_blank"><img src="imgs/logo_tilsi.png" alt="logo_tilsi"/></a></li>
+            </ul>
+            </div>
+        </div>
+    </div>
+    <div id="footer" class="comWidth">
+    	<p>
+        	<span>You can email a support request to the iProX team at the BPRC.contact information iprox@iprox.org</span><br/>
+    		<span>Support by Beijing Proteome Research Center(BPRC)</span><br/>
+        	<span>京ICP备11036956号-5</span>
+        </p>
+    </div>
+    <a id="backTop" href="javascript:scroll(0,0)"><img src="imgs/backTop.jpg"/></a>
+</body>
+</html>

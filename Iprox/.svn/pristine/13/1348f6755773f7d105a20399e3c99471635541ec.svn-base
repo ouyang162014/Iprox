@@ -1,0 +1,22 @@
+t_protein表
+pi float 11
+threshold  float 11
+peptides  int 4
+distinct_peptides  int 4
+ptms  int 4
+
+t_spectrum表
+spectrum_id  auto_increament
+identified  tinyint  4
+precursor_m_z double  11
+sum_of_intensity  double 11
+modifications varchar  1024
+Precursor Intensity double 11
+
+t_protein表增加字段
+name varchar(50)
+psms double 11
+
+
+
+

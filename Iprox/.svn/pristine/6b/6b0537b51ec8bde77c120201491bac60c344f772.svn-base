@@ -1,0 +1,7 @@
+driverClassName=com.mysql.jdbc.Driver
+jdbc_url=jdbc:mysql://172.22.146.251:4342/iprox_old_1105
+jdbc_username=root
+jdbc_password=cqupt2013+
+
+maxActive=50
+minIdle=5

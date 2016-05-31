@@ -1,0 +1,113 @@
+package cn.cqupt.iprox.model.vo;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * 将质谱图路径转换为对象的方法
+ * 返回一个SpectrumDetail的List 
+ * 即一个质谱图的图的所有坐标信息
+ * @author Cbillow
+ *
+ */
+public class PathFileToObjectUtils {
+	
+	
+	
+	
+	
+	/**
+	 * 根据文件路径返回Name,现在name在第一行，以后如果name的位置修改了就需要修改该代码。
+	 * @param path
+	 * @return
+	 * @throws IOException
+	 */
+	public static String getNameFromFile(String path) throws IOException{
+		File file=new File("path");
+		FileInputStream in=new FileInputStream(file);
+		InputStreamReader inReader=new InputStreamReader(in);
+		BufferedReader reader=new BufferedReader(inReader);
+		String line=reader.readLine();
+		return line;
+	}
+	/**
+	 * 将文件path解析为对象
+	 * @param path
+	 * @return	返回一个SpectrumDetail的List 
+	 * 			即一个质谱图的图的所有坐标信息
+	 */
+	public static List<SpectrumView> stringToSpectrumView(String path) {
+		List<SpectrumView> spectrumDetails = new ArrayList<SpectrumView>();
+		
+		String temp = PathFileToObjectUtils.pathToString(path);	    //	将path对应的文件解析为字符串
+		String[] s = temp.split("&&&") ;							//	将解析后的字符串按&&&拆分成字符串数组
+		
+		//开始对字符串数组进行操作（200.638	203	"?"）
+		for (int i = 0; i < s.length; i++) {
+			SpectrumView sd = new SpectrumView() ;
+			
+			s[i] = s[i].replace("\t", " ");		//将制表符转换为空格
+			String[] s2 = s[i].split(" ") ;		//将没有制表符的字符串数组再划分为数组，分别插入到 质谱图的图 对象中去
+			
+			sd.setX(Float.parseFloat(s2[0]));
+			sd.setY(Integer.parseInt(s2[1]));
+			//需要第三个属性的引号去掉在进行操作
+			sd.setInfos(SpectrumStringUtils.parseStringToInfos(s2[2].substring(1, s2[2].length()-1)));	//质谱图的图第三个属性需要解析，返回一个信息列表
+			sd.setTag(SpectrumStringUtils.parseStringToTag(s2[2].substring(1, s2[2].length()-1)));	//质谱图的图第三个属性需要解析，返回一个标签
+			
+			spectrumDetails.add(sd) ;		//将 质谱图的图 对象放入到list中
+		}
+		return spectrumDetails;
+	}
+
+	/**
+	 * 将路径对应的文件解析为字符串
+	 * 去掉有冒号的行
+	 * @param path
+	 * @return
+	 */
+	private static String pathToString(String path) {
+		StringBuffer sBuffer = new StringBuffer();
+		try {
+			File tmp = new File("") ;
+		//	path = tmp.getAbsolutePath() + "/document/其它文档/030918_hfl_HF_SDS_01.00279.00279.2.msp" ;
+			File file = new File(path);
+			
+			if (file.isFile() && file.exists()) { // 判断文件是否存在
+				InputStreamReader read = new InputStreamReader(new FileInputStream(file), "utf-8");// 考虑到编码格式
+				BufferedReader bufferedReader = new BufferedReader(read);
+				String s1 = null;
+				//开始读取
+				while ((s1 = bufferedReader.readLine()) != null) {       //依次读取每一行，如果有：则不读取
+					if(!s1.contains("\t")) {
+						s1=null ;							//	去除无用的行
+					} else {
+						sBuffer.append(s1 + "&&&");			//如果不属于无用行，则在每一行后面加&&&，以便拆分
+					}
+				}
+				read.close();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return sBuffer.toString();
+	}
+
+	public static void main(String[] args) {
+		
+		String path = "/Users/lwg/030918_hfl_HF_SDS_01.00279.00279.2.msp" ;
+		
+		List<SpectrumView> spectrumDetails = PathFileToObjectUtils.stringToSpectrumView(path) ;
+		for(SpectrumView sd:spectrumDetails) {
+			System.out.println(sd);
+		}
+	}
+}

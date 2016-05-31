@@ -1,0 +1,105 @@
+package cn.cqupt.iprox.controller;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.alibaba.fastjson.JSON;
+
+import cn.cqupt.iprox.service.SpectrumService;
+
+/**
+ * 
+ * @author Cbillow
+ *
+ */
+@Controller
+@RequestMapping("/spectrum")
+public class SpectrumController {
+
+	private SpectrumService spectrumService ;
+	@Resource(name="spectrumService")
+	public void setSpectrumService(SpectrumService spectrumService) {
+		this.spectrumService = spectrumService;
+	}
+	
+	
+	/**
+	 * 根据子项目id分页查询所有质谱图
+	 * @param NextPageNum
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/selectAll",produces="application/json")
+	@ResponseBody
+	public String getProteinBypage(int subId, int NextPageNum) throws Exception{
+		
+		Map<String, Object> map=spectrumService.getSpectrumBySubId(subId, NextPageNum);
+		return JSON.toJSONString(map);
+	}
+	
+	/**
+	 * 显示一个肽段对应的 质谱图的图像
+	 * 一个肽段对应一个质谱图
+	 * @param peptide_id
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/selectSpectrumViewByPepId", produces="application/json")
+	@ResponseBody
+	public String getSpectrumView(int peptide_id) throws Exception {
+		//System.out.println("enter selectSpectrumViewByPepId control");
+		Map<String, Object> map = spectrumService.getSpectrumDetailByPeptideId(peptide_id) ;
+		return JSON.toJSONString(map) ;
+	}
+	/**
+	 * 通过质谱图id返回质谱图数据
+	 */
+	@RequestMapping(value="/selectSpectrumViewBySpectrumId", produces="application/json")
+	@ResponseBody
+	public String getSpectrumViewBySpectrumId(int spectrumId) throws Exception{
+		Map<String,Object> map=spectrumService.getSpectrumDetailBySpectrumId(spectrumId);
+		return JSON.toJSONString(map);
+	}
+	/**
+	 * 根据子项目得到峰数的分布情况
+	 * @param subId
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/getView7",produces="application/json")
+	@ResponseBody
+	public String getPeaksInfo(int subId) throws Exception{
+		Map<String,Double> map=spectrumService.getPeaksInfo(subId);
+		return JSON.toJSONString(map);
+	}
+	
+	
+	/**
+	 * 在子项目下将质谱图按照charge的数量分类（iditified为true）为1、2、3、4、5、6、7、>7这8种，
+	 * 得到8种charge的数量
+	 * @param subId
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/getView5",produces="application/json")
+	@ResponseBody
+	public String getChargeInfoBySubId(int subId) throws Exception{
+		Map<String,Object> map=spectrumService.getChargeInfoBySubId(subId);
+		return JSON.toJSONString(map);
+	}
+	
+	int SpectrumId = 69024;
+	@RequestMapping(value="/getView4",produces="application/json")
+	@ResponseBody
+	public String getPathBySpectrumId(){
+		HashMap averageSpectrum = (HashMap) spectrumService.getPathBySpectrumId(SpectrumId);
+		return JSON.toJSONString(averageSpectrum);
+	}
+	
+}

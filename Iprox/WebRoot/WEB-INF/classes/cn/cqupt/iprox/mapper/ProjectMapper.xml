@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://www.mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- xiezhaodong -->
+<mapper namespace="cn.cqupt.iprox.dao.ProjectDao">
+	
+	<resultMap type="cn.cqupt.iprox.model.vo.ReturnDetail" id="projectByProjectId" autoMapping="true">
+		<association property="project" javaType="cn.cqupt.iprox.model.po.Project">
+			<id column="pid" property="pid"/>
+			<result column="changeid" property="changeid"/>
+			<result column="ptitle" property="ptitle"/>
+			<result column="status" property="status"/>
+			<result column="description" property="description"/>
+			<result column="ptag" property="ptag"/>
+			<result column="reference" property="reference"/>
+			<result column="pubmedid" property="pubmedid"/>
+			<result column="contributor" property="contributor"/>
+			<result column="institution" property="institution"/>
+			<result column="contactinformation" property="contactinformation"/>
+			<result column="submitted" property="submitted"/>
+		</association>
+		<association property="group" javaType="cn.cqupt.iprox.model.po.Group">
+			<id column="gid" property="gid"/>
+			<result column="groupname" property="groupName"/>
+		</association>
+	</resultMap>
+	<!--  根据pid查询项目  -->
+	<select id="getProjectInforByPid" resultMap="projectByProjectId" parameterType="int">
+		select t1.pid,t1.changeid,t1.ptitle,t1.status,t1.description,t1.ptag,t1.reference,t1.pubmedid,t1.contributor,t1.institution,t1.contactinformation,t1.submitted,
+		t3.gid,t3.groupname
+		from t_project t1    
+		LEFT JOIN project_group t2 ON (t1.pid=t2.pid)
+		LEFT JOIN t_group t3 ON (t2.gid=t3.gid)
+		WHERE t1.pid=#{pid}
+	</select> 
+ 	
+
+	
+	
+	<!-- 分页查询项目 -->
+	<select id="getProjectByPage" resultType="cn.cqupt.iprox.model.po.Project"
+		parameterType="int">
+		SELECT pid,identifyid,ptitle,description,date
+		from t_project
+		ORDER BY
+		date desc
+		limit #{rows},20
+		<!--默认每页20条 -->
+	</select>
+	<!-- 查询项目总条数的sql -->
+	<select id="getProjectCount" resultType="int">
+		SELECT count(*) from
+		t_project
+	</select>
+
+
+
+	<resultMap type="cn.cqupt.iprox.model.vo.ReturnDetail" id="projectByGroup" autoMapping="true">
+		<association property="group" javaType="cn.cqupt.iprox.model.po.Group">
+			<id column="gid" property="gid"/>
+			<result column="groupname" property="groupName"/>
+		</association>
+		<association property="project" javaType="cn.cqupt.iprox.model.po.Project">
+			<id column="pid" property="pid"/>
+			<result column="ptitle" property="ptitle"/>
+			<result column="date" property="date"/>
+		</association>
+	</resultMap>
+	<!-- 根据群组查询项目 -->
+	<select id="getProjectByGroup" resultType="cn.cqupt.iprox.model.po.Project"
+		parameterType="java.util.Map">
+		SELECT t3.pid,t3.ptitle,t3.date
+		FROM
+		t_group t1
+		LEFT JOIN project_group t2 ON (t1.gid=t2.gid)
+		LEFT JOIN
+		t_project t3 ON (t2.pid=t3.pid)
+		WHERE t1.gid=#{gid}
+		ORDER BY t3.date
+		DESC
+		LIMIT 0,#{ProjectNum};
+	</select>
+	<!-- 根据群组查询项目总数 -->
+	<select id="getProjectCountByGroup" resultType="int">
+		SELECT COUNT(*)
+		FROM t_group t1
+		LEFT JOIN project_group t2 ON (t1.gid=t2.gid)
+		LEFT JOIN
+		t_project t3 ON (t2.pid=t3.pid)
+		WHERE t1.gid=#{gid} ;
+	</select>
+
+
+
+
+	<!-- 根据（物种，组织，细胞类型，疾病类型）查询包含该条件的项目 -->
+	<select id="getProjectBySTTD" resultType="cn.cqupt.iprox.model.po.Project"
+		parameterType="cn.cqupt.iprox.model.vo.STTDType">
+		SELECT DISTINCT (t2.ptitle),
+			t2.pid ,
+			t2.date
+			FROM t_subproject t1
+			LEFT JOIN t_project t2
+			ON (t1.pid=t2.pid)
+			<where>
+				<if test="species!=null"> species=#{species}</if>
+				<if test="tissue!=null"> tissue=#{tissue}</if>
+				<if test="cellType!=null"> cellType=#{cellType}</if>
+				<if test="disease!=null"> disease=#{disease}</if>
+			</where>
+			ORDER BY t2.date
+			LIMIT 0,#{ProjectNum};
+	</select>
+	<!-- 根据（物种，组织，细胞类型，疾病类型）查询包含该条件的项目总数 -->
+	<select id="getProjectCountBySTTD" resultType="int"
+		parameterType="cn.cqupt.iprox.model.vo.STTDType">
+		SELECT COUNT(DISTINCT t2.ptitle) FROM t_subproject t1
+			LEFT JOIN t_project t2 ON (t1.pid=t2.pid)
+			<choose>
+				<when test="species!=null"> where species=#{species}</when>
+				<when test="tissue!=null"> where tissue=#{tissue}</when>
+				<when test="cellType!=null"> where cellType=#{cellType}</when>
+				<when test="disease!=null"> where disease=#{disease}</when>
+			</choose>
+	</select>
+
+
+
+
+
+</mapper>

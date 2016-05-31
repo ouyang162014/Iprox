@@ -1,0 +1,141 @@
+﻿@charset "utf-8";
+/* CSS Document */
+
+
+/*Common Styles*/
+
+body{ background:#fff url(../imgs/home_bg.jpg) left bottom repeat-x; font-size:14px; color:#000; position:relative;}
+p{padding:10px; background:#f0f0f0; margin:1px 0 30px 0; line-height:1.5em;}
+table{ width:100%;}
+table,tr,td{ border:1px solid #000; border-collapse:collapse; vertical-align:middle; text-align:center;}
+table caption{ text-align:left; padding-top:20px;}
+thead td{ font-weight:bolder; font-size:16px;}
+td{padding:0 3px;}
+li{ list-style:disc;}
+#mainav li,#secnav li{ list-style:none;}
+#mainav a:hover,#secnav a:hover{ text-decoration:none;}
+a{ color:#458845; font-weight:bold;}
+a:hover{ color:#08c; text-decoration:underline;}
+input{ border:1px solid #bebebe; border-top:2px solid #898a8c; padding:7px;}
+
+h1{ font-size:24px; margin:15px 0;}
+h2{ font-size:20px; margin:10px 0;}
+h3{ font-size:16px; margin:10px 0;}
+h1,h2,h3,h4,h5,h6{ padding-left:10px; margin:10px 0;  line-height:1.5em;}
+h4,h5,h6{ font-size:14px;}
+
+.comWidth{ width:100%; margin:0 auto; min-width:1000px;}
+.con_left{ width:8%; float:left; padding-left:20px;}
+.con_left ul{ position:fixed;}
+.con_left li{ width:80px;}
+.con_left a{ display:block; color:#000; height:1.8em; line-height:1.8em; margin-bottom:6px; }
+.con_left .active,.con_left a:hover{ background:#08c; color:#fff;text-align:center;}
+.con_right{ width:86%; float:right; padding-right:20px;  min-height:500px; position:relative; }
+
+/*header*/
+
+#header{ height:95px; background:#038BB1 url(../imgs/iprox_h_p.png) left bottom no-repeat; position:relative; margin-bottom:20px;}
+#header h1{ color:#fff; width:16em; float:right; margin-right:10em; clear:both;}
+#mainav{ float:right; width:auto; line-height:30px;}
+#mainav li{ float:left; } 
+#mainav a{ font-size:15px; color:#fff; margin:0 4px; padding:6px; border-radius:8px; }
+#mainav a:hover{ color:#08c; background:#fff;}
+.current{ background:#18a0c6; font-weight:bolder;}
+
+
+/*content_home*/
+
+#content_home h2{ padding:10px; background:#e0f4fb; margin:0;}
+
+.tablediv,#content_home h4{ background:#f0f0f0; }
+
+.pointlist{ background:#dff0d8; padding:10px; margin:1px 0 30px 0;}
+.pointlist h3{ font-weight:normal; color:#458845;}
+.pointlist li{ margin-left:40px; color:#458845;}
+
+#content_home h4,#picList,.tablediv{ padding:10px; margin:1px 0 30px 0;}
+
+#content_home table{  background:#f0f0f0; text-align:center; }
+#content_home tr,#content_home td{ border-color:#468847; color:#468847;}
+
+#content_home h4{ margin:0; margin-top:1px;}
+
+.pointlist div>p{ margin-top:0;}
+
+#picList{ overflow:hidden; margin:0; margin-top:-30px; background:#f0f0f0; padding-left:25px;} 
+#picList li{ float:left; margin:0;  list-style:none; margin-right:2%; width:20%; }
+#picList img{ width:100%; min-height:60px;}
+#picList #litPic{ width:10%;}
+{height:60px;margin-right:10px;}
+#clickahrefa,#clickahrefb,#clickahrefc{ color:#F00;}
+
+/*content_browse*/
+#content_browse{ overflow:hidden;}
+#tabModule{ margin:0; position:relative;}
+.tabswitch{  overflow:hidden; margin-top:20px; margin-bottom:20px;}
+.tabswitch>a{ color:#fff; background:#08c; font-weight:bold; border-right:1px solid #08c;  padding:9px 25px;  float:left; display:inline;}
+.tabswitch>a.active,.tabswitch>a:hover{ background:#008040; border-color:#fff; text-decoration:none;}
+
+#byproject tr, #byproject td{ line-height:26px;}
+#byproject td { padding:0 7px;}
+#byproject tr td:first-child{ padding:0; font-weight:bold;}
+#byproject a{line-height:26px;}
+
+
+.divide>li{ list-style-position:inside; list-style:square; margin-left:60px; }
+
+.divide>li h4{  display:inline; cursor:pointer; }
+
+.divide ul a{ cursor:pointer;}
+.divide>li li{ margin-left:40px;}
+
+#pj_count{ padding-right:10px;}
+#pj_name{ padding-left:10px;}
+.tabpage{ overflow:hidden; min-height:600px;}
+.tabpage>div{ min-height:600px; display:none; clear:both; }
+
+
+/*pagebox*/
+.pagebox{ margin:0 auto; width:480px; background:#fff;padding:20px 60px; color:#000; font-family:"微软雅黑"; font-size:14px; line-height:24px;}
+	.pagebox a,.more>a{ padding:4px 8px; border:1px solid #06F; color:#fff; text-decoration:none; background:#08c;}
+	.pagebox a:hover,.pagebox a.active,.more>a:hover,.more>a.active{ padding:4px 8px; border:1px solid #06F; background:#008040; text-decoration:none;}
+	.pagebox input{  border:none; padding:0 5px;height:24px; outline:1px solid #08c; width:40px;}
+	.pagebox input:hover{ outline-color:#C3C; height:24px; padding:0 5px;}
+	.pagebox button{ background:none; border:1px solid #06F; height:24px; padding:0 10px; cursor:pointer; font-family:"微软雅黑"; font-size:14px; background:#08c; color:#fff;}
+	.pagebox button:hover{background:#008040;}
+	.pagebox span{ margin: 0 5px;}
+
+.more{ padding-left:20px; margin:20px 0; }
+
+/*sub project*/
+
+
+/*sub project*/
+
+.sub_cont h2{ padding:0 12px; background:#69C; text-align:center; color:#fff; } 
+
+.dislist p{ overflow:hidden; margin-bottom:0; background:#f8f8f8;}
+.dislist h4{ background:#f8f8f8; margin:0;}
+.dislist span{ float:left;  width:190px; padding-left:10px; line-height:28px;}
+span.mar_left{ margin-left:52px; width:150px;}
+.dislist input{ float:left; width:200px;}
+.dislist .long{ width:628px;}
+.dislist input:hover,.dislist input:focus{ border-color:#08c;}
+.dislist>div{ background:#f8f8f8; padding:0 30px 30px;}
+.littlespan span,.littlespan input{ width:90px;}
+.littlespan input{ padding:4px;}
+
+/*Experiment Informationt*/
+.childTable td,tr{border-left:0;border-right:0;border-top:0;border-bottom:0 solid #000; vertical-align:middle; text-align:center;}
+.childTable{border-top:0;border-bottom:0;border-left:0;border-right:0}
+
+/*footer*/
+#footer{height:100px; overflow:hidden; margin-top:40px; position:relative;}
+#footer p{ margin:20px auto;  background-color:transparent; text-align:center; padding:0;}
+#footer span{ line-height:1.2em;}
+#backTop { position:fixed; bottom:30px; right:40px; width:60px; display:block; z-index:1111111; }
+#backTop img{ height:100%;}
+
+
+
+

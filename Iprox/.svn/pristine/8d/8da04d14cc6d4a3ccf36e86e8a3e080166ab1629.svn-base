@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="cn.cqupt.iprox.dao.PeptideDao">
+
+    <resultMap type="cn.cqupt.iprox.model.vo.ReturnDetail" id="peptideByProteinId" autoMapping="true">
+        <association property="peptide" javaType="cn.cqupt.iprox.model.po.Peptide">
+            <id column="peptide_id" property="peptide_id"/>
+            <result column="peptide" property="peptide"/>
+            <result column="fit" property="fit"/>
+            <result column="delta_m_z" property="delta_m_z"/>
+            <result column="charge" property="charge"/>
+            <result column="precursor_m_z" property="precursor_m_z"/>
+            <result column="modifications" property="modifications"/>
+            <result column="lons" property="lons"/>
+            <result column="mascot_score" property="mascot_score"/>
+            <result column="length" property="length"/>
+            <result column="start" property="start"/>
+            <result column="stop" property="stop"/>
+            <result column="psm" property="psm"/>
+            <result column="pi" property="pi"/>
+            <result column="identification_id" property="identification_id"/>
+        </association>
+         <association property="spectrum" javaType="cn.cqupt.iprox.model.po.Spectrum">
+            <id column="spectrum_id" property="spectrum_id"/>
+        </association>
+         <association property="protein" javaType="cn.cqupt.iprox.model.po.Protein">
+            <id column="protein_id" property="protein_id"/>
+        </association>
+    </resultMap>
+    <!-- 查询属于这个蛋白质的所有肽段 跟子项目无关-->
+    <select id="getPeptideByProteinId" resultMap="peptideByProteinId" parameterType="java.util.Map">
+        SELECT t1.peptide,t1.peptide_id,t1.fit,t1.delta_m_z,t1.charge,t1.precursor_m_z,
+        t1.modifications,t1.lons,t1.mascot_score,t1.length,t1.`start`,t1.`stop`,
+        t1.psm,t1.pi,t1.identification_id,t2.spectrum_id,t2.protein_id
+
+        FROM t_peptide t1
+        LEFT JOIN t_pep_pro_psm_sub t2 ON (t1.peptide_id=t2.peptide_id)
+        where t2.protein_id=#{proteinId}
+        GROUP BY peptide_id
+        LIMIT #{rows},20
+        <!--默认每页20条 -->
+    </select>
+    <!-- 根据蛋白质查询肽段的数量 -->
+    <select id="getPeptideByProteinIdCount" resultType="int" parameterType="int">
+		SELECT COUNT(DISTINCT t1.peptide_id)
+			FROM t_peptide t1
+			LEFT JOIN t_pep_pro_psm_sub t2 ON (t1.peptide_id=t2.peptide_id)
+			LEFT JOIN t_protein t3 ON (t2.protein_id=t3.protein_id)
+			where t2.protein_id=#{proteinId}
+	</select>
+
+
+    <resultMap type="cn.cqupt.iprox.model.vo.ReturnDetail" id="peptideByPeptide" autoMapping="true">
+        <association property="peptide" javaType="cn.cqupt.iprox.model.po.Peptide">
+            <id column="peptide_id" property="peptide_id"/>
+            <result column="peptide" property="peptide"/>
+            <result column="fit" property="fit"/>
+            <result column="delta_m_z" property="delta_m_z"/>
+            <result column="charge" property="charge"/>
+            <result column="precursor_m_z" property="precursor_m_z"/>
+            <result column="modifications" property="modifications"/>
+            <result column="lons" property="lons"/>
+            <result column="mascot_score" property="mascot_score"/>
+            <result column="length" property="length"/>
+            <result column="start" property="start"/>
+            <result column="stop" property="stop"/>
+            <result column="psm" property="psm"/>
+            <result column="pi" property="pi"/>
+            <result column="identification_id" property="identification_id"/>
+        </association>
+        <association property="protein" javaType="cn.cqupt.iprox.model.po.Protein">
+            <id column="protein_id" property="protein_id"/>
+            <result column="protein" property="protein"/>
+        </association>
+        <association property="spectrum" javaType="cn.cqupt.iprox.model.po.Spectrum">
+            <id column="spectrum_id" property="spectrum_id"/>
+        </association> 
+    </resultMap>
+    <!-- 根据肽段序列分页查找所有序列相同的肽段 -->
+    <select id="getTheSameByPeptide" resultMap="peptideByPeptide" parameterType="java.util.Map">
+        SELECT t1.peptide_id,t1.peptide, t1.modifications, t1.fit, t1.charge, t1.precursor_m_z, t1.lons,
+        t1.mascot_score,t1.start, t1.stop, t1.identification_id, t1.psm, t1.length,
+        t1.pi, t1.delta_m_z, t3.protein_id,t3.protein, t2.spectrum_id
+        FROM t_peptide t1
+        LEFT JOIN t_pep_pro_psm_sub t2
+        ON (t1.peptide_id = t2.peptide_id)
+        LEFT JOIN t_protein t3
+        ON (t2.protein_id=t3.protein_id)
+        WHERE t1.peptide = #{peptide}
+        GROUP BY peptide_id
+        LIMIT #{rows},20
+        <!--默认每页20条 -->
+    </select>
+    <!-- 查询序列相同的肽段总数 -->
+    <select id="getPeptideCountByPeptide" resultType="int" parameterType="String">
+	   SELECT COUNT(*) FROM 
+			t_peptide 
+			WHERE peptide=#{peptide};
+	</select>
+
+
+    <resultMap type="cn.cqupt.iprox.model.vo.ReturnDetail" id="peptideBySubId" autoMapping="true">
+        <association property="peptide" javaType="cn.cqupt.iprox.model.po.Peptide">
+            <result column="peptide" property="peptide"/>
+            <result column="delta_m_z" property="delta_m_z"/>
+            <result column="modifications" property="modifications"/>
+            <result column="length" property="length"/>
+            <result column="psm" property="psm"/>
+            <result column="pi" property="pi"/>
+        </association>
+        <association property="protein" javaType="cn.cqupt.iprox.model.po.Protein">
+            <id column="protein_id" property="protein_id"/>
+            <result column="protein" property="protein"/>
+        </association>
+        <association property="subProject" javaType="cn.cqupt.iprox.model.po.SubProject">
+            <id column="subid" property="subid"/>
+            <result column="subtitle" property="subtitle"/>
+        </association>
+    </resultMap>
+    <!-- 根据子项目id分页查询序列不同的肽段(肽段的信息包含所属蛋白质) -->
+    <select id="getPeptideBySubId" resultMap="peptideBySubId" parameterType="java.util.Map">
+		SELECT t1.peptide,t4.protein,t4.protein_id, t1.modifications, 
+			t1.psm, t1.length, t1.pi, t1.delta_m_z=0 AS 'delta_m_z',t3.subid,t3.subtitle
+			FROM t_peptide t1
+			LEFT JOIN t_pep_pro_psm_sub t2 ON (t1.peptide_id=t2.peptide_id)
+			LEFT JOIN t_subproject t3 ON (t2.subid=t3.subid)
+			LEFT JOIN t_protein t4 ON (t2.protein_id=t4.protein_id)
+			WHERE t3.subid=#{subId}
+			GROUP BY peptide
+			LIMIT #{rows},20
+	</select>
+    <!-- 根据子项目id分页查询序列不同的肽段的总数 -->
+    <select id="getPeptideCountBySubId" resultType="int" parameterType="int">
+		SELECT COUNT(*) FROM
+		(SELECT t1.peptide,t4.protein, t1.modifications, 
+		t1.psm, t1.length, t1.pi, t1.delta_m_z=0 AS 'delta_m_z',t3.subid
+		FROM t_peptide t1
+		LEFT JOIN t_pep_pro_psm_sub t2 ON (t1.peptide_id=t2.peptide_id)
+		LEFT JOIN t_subproject t3 ON (t2.subid=t3.subid)
+		LEFT JOIN t_protein t4 ON (t2.protein_id=t4.protein_id)
+		WHERE t3.subid=#{subId}
+		GROUP BY peptide)t5
+	</select>
+
+
+    <!--在子项目下将delta_m_z（肽段的属性）的按值分类，查询数量最多的记录的数目  -->
+    <select id="getMaxCountDelta" resultType="int">
+		select delta_m_z,count(delta_m_z) 
+		from t_peptide
+		GROUP BY delta_m_z
+		ORDER BY count(delta_m_z) DESC
+		limit 0,1
+	</select>
+    <!--在子项目下将肽段按delta_m_z（肽段的属性）的值分类，查询值  -->
+    <select id="getDelta" resultType="float" parameterType="int">
+		SELECT t2.delta_m_z FROM 
+		(SELECT DISTINCT subid,peptide_id from t_pep_pro_psm_sub) t1 LEFT JOIN t_peptide t2 ON(t1.peptide_id=t2.peptide_id)
+		WHERE t1.subid=#{subid}
+		GROUP BY t2.delta_m_z
+		ORDER BY count(t2.delta_m_z) DESC
+	</select>
+    <!--在子项目下将肽段按delta_m_z（肽段的属性）的值分类，查询值的数目  -->
+    <select id="getDeltaCount" resultType="int" parameterType="int">
+		SELECT count(t2.delta_m_z) FROM 
+		(SELECT DISTINCT subid,peptide_id from t_pep_pro_psm_sub) t1 LEFT JOIN t_peptide t2 ON(t1.peptide_id=t2.peptide_id)
+		WHERE t1.subid=#{subid}
+		GROUP BY t2.delta_m_z
+		ORDER BY count(t2.delta_m_z) DESC
+	</select>
+
+    <!-- 分页查询序列不同的肽段 -->
+    <select id="getPeptideByPage" resultType="cn.cqupt.iprox.model.po.Peptide" parameterType="int">
+        SELECT DISTINCT (t1.peptide), t1.modifications,
+        t1.psm, t1.length, t1.pi, t1.delta_m_z=0 AS 'delta_m_z', t3.protein
+        FROM t_peptide t1
+        LEFT JOIN t_pep_pro_psm_sub t2 ON (t1.peptide_id=t2.peptide_id)
+        LEFT JOIN t_protein t3 ON (t2.protein_id=t3.protein_id)
+        LIMIT #{rows},20
+        <!--默认每页20条 -->
+    </select>
+    <!-- 查询序列不同的肽段总数 -->
+    <select id="getPeptideCount" resultType="int">
+        <!-- select count(*) from t_peptide -->
+        select count(*) from
+        (select DISTINCT(t1.peptide) from t_peptide t1)
+        as total ;
+    </select>
+
+    <!-- 根据subid查询肽段的胰蛋白酶漏切位点 by liweiguo -->
+    <select id="getCuttingSite" resultType="int" parameterType="int">
+		SELECT t1.cutting_site
+		FROM t_peptide t1
+		LEFT JOIN t_pep_pro_psm_sub t2 on (t1.peptide_id = t2.peptide_id)
+		LEFT JOIN t_subproject t3 on(t2.subid = t3.subid)
+		WHERE t3.subid = #{subid};
+	</select>
+	
+	<!--在subid下将肽段按照肽段的母粒子的质量分类，得到肽段的母粒子的质量  -->
+	<select id="getDeltaBySubId" resultType="float" parameterType="int">
+		SELECT t2.delta_m_z
+		FROM (SELECT DISTINCT peptide_id,subid FROM t_pep_pro_psm_sub)t1 LEFT JOIN t_peptide t2 ON (t1.peptide_id=t2.peptide_id)
+		WHERE t1.subid=#{subid}
+		GROUP BY t2.delta_m_z
+	</select>
+	<!--在subid下将肽段按照肽段的母粒子的质量分类，得到肽段的母粒子的质量对应的precursor_m_z数量  -->
+	<select id="getPrecursorMZCountOfDeltaBySubId" resultType="int" parameterType="int">
+		SELECT COUNT(t2.precursor_m_z) as count
+		FROM (SELECT DISTINCT peptide_id,subid FROM t_pep_pro_psm_sub)t1 LEFT JOIN t_peptide t2 ON (t1.peptide_id=t2.peptide_id)
+		WHERE t1.subid=#{subid}
+		GROUP BY t2.delta_m_z
+	</select>
+	<!--在subid下得到precursor_m_z的总数  -->
+	<select id="getPrecusorMZCount" resultType="int" parameterType="int">
+		SELECT COUNT(t2.precursor_m_z) as count
+		FROM (SELECT DISTINCT peptide_id,subid FROM t_pep_pro_psm_sub)t1 LEFT JOIN t_peptide t2 ON (t1.peptide_id=t2.peptide_id)
+		WHERE t1.subid=#{subid}
+	</select>
+</mapper>

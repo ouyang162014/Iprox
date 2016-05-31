@@ -1,0 +1,80 @@
+/* CSS Document */
+/*
+#PageTurn{
+	width:1000px;
+	height:20px;
+	
+	}
+
+.PageTurn{
+	width:100px;
+	background-color:#00FFFF;
+	float:left;
+	margin-left:50px;
+	
+	font-size:12px;
+	}
+.PageTurn input{
+	width:30px;
+	height:5px;
+	}*/
+	
+	
+/*turnpagebox*/
+.turnpagebox{ 
+	margin:0 auto; 
+	width:700px; 
+	background:#fff;
+	padding:20px 60px; 
+	color:#000;  
+	font-size:14px; 
+	line-height:24px;    
+	line-height: 35px;
+    overflow: hidden;
+    }
+.turnpagebox a{ 
+	padding:4px 8px; 
+	border:1px solid #06F; 
+	color:#fff; 
+	text-decoration:none; 
+	background:#08c;
+	font-weight:500;
+	line-height:25px;
+	}
+.turnpagebox a:hover,.turnpagebox a.active,.more>a:hover,.more>a.active{ 
+	padding:4px 8px; 
+	border:1px solid #06F; 
+	background:#008040; 
+	text-decoration:none;
+	}
+.turnpagebox input{  
+	border:none; 
+	padding:0 5px;
+	height:24px; 
+	outline:1px solid #08c; 
+	width:40px;
+	}
+.turnpagebox input:hover{ 
+	outline-color:#C3C; 
+	height:24px; 
+	padding:0 5px;
+	}
+.turnpagebox button{ 
+	background:none; 
+	border:1px solid #06F; 
+	height:24px; 
+	padding:0 10px; 
+	cursor:pointer;
+	font-size:14px; 
+	background:#08c; 
+	color:#fff;
+	}
+.turnpagebox button:hover{background:#008040;}
+.turnpagebox span{ margin: 0 5px;}
+/*.turnpagebox a{width:27px;height:25px;display:block;float:left;}*/
+.turnpagebox a{
+	height:25px;
+	display:block;
+	float:left;
+	}
+

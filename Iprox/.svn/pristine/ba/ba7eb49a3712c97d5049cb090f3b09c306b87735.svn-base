@@ -1,0 +1,93 @@
+
+
+----------任意点击子项目，到 sub_content.jsp 页面，默认选中 Subproject View 标签 :--------------------------------------------------------------------------------------
+
+根据subId查询子项目详情:/browse/subProject?subId=222
+
+	前端传入：subId=2
+	页面跳转：从 Project.jsp页面跳转到 sub_content.jsp页面
+	后台返回：
+			json字符串的对象：subProjectAll
+			 "subProject": [
+			        {
+			            "group": {
+			                "gid": 12,
+			                "groupName": "Bio-mass Spectrometry"
+			            },
+			            "subProject": {
+			                "celltype": "",
+			                "cleavages_accession": "",
+			                "cleavages_cv": "PRIDE",
+			                "cleavages_name": "",
+			                "cleavages_value": "",
+			                "ddtype": "Reversed-combined",
+			                "digestion": "Trypsin",
+			                "disease": "",
+			                "fragment_accession": "",
+			                "fragment_cv": "PRIDE",
+			                "fragment_name": "",
+			                "fragment_value": "",
+			                "otherinformation": "",
+			                "peptide_accession": "",
+			                "peptide_cv": "PRIDE",
+			                "peptide_name": "",
+			                "peptide_value": "",
+			                "quality": "",
+			                "quantitation": "",
+			                "sdtype": "",
+			                "sdversion": "",
+			                "species": "Thermus thermophilus",
+			                "status": 1,
+			                "subdescription": "three repeats",
+			                "subid": 221,
+			                "subsummary": "",
+			                "subtag": "Tengchong thermophiles;immobilized trypsin;gmag",
+			                "subtitle": "Tengchong thermophiles digest by gmag immobilized trypsin",
+			                "softwarename"："",
+			                "softwareversion":"",
+			                "tissue": ""
+			            }
+			        }
+			    ],
+			     "subProjectDetail": [
+				        {
+				            "msanalyer": {
+				                "accession": "MS:1000079",
+				                "cv": "PSI-MS",
+				                "id": 401,
+				                "name": "fourier transform ion cyclotron resonance mass spectrometer",
+				                "template": 0,
+				                "value": ""
+				            },
+				            "mssource":{...}     
+				            "msdetector":{...}
+				 /*  以上三个对象对应页面中的Details of MS Instrument表格
+				            三个对象的属性相同
+				            如果数据库中该对象无值
+				            则返回到前端的数据中无此对象  */
+				            
+				            
+				            
+				            "growth":{ 	
+				            	"accession": "",
+				                "cv": "BTO",
+				                "id": 0,
+				                "name": "",
+				                "value": ""}
+				            "treatment":{...}
+				            "extraction":{...}
+				            "digestion":{...}
+				            "acquisition":{...}
+				            "separation":{...}
+				            "moreinfor": {...}
+				/*   以上三个对象对应页面中的Details of Experiment Protocol表格表格
+				            七个对象的属性相同
+				            如果数据库中该对象无值
+				            则返回到前端的数据中无此对象   */	
+				            
+				            
+				            
+				            
+				            
+				            
+				            	      		      

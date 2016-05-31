@@ -1,0 +1,157 @@
+
+--------By Project----------------------------------------------------------------------------------------------------
+
+1.分页查询项目名称
+
+		   后台路径: /browse/byProject?NextPageNum=1
+		   前端传入：NextPageNum:1,
+		   后台返回json
+		            ProjectDetail[	
+		              { pid:1, 			//项目id，用这个作为连接地址，连接暂时不确定 。下面一样，每次返回回来对象里面都会有id
+		            	ptitle:HCC-12258, 	//项目名字
+						date:...    		//日期  (后台已经排序 默认顺序降序（现在-过去）)   
+		            	description：...},
+		            	...
+		            	]
+		            NextPageNum //下一页
+		            SumProject  //总页数
+
+
+----------By Group:--------------------------------------------------------------------------------------
+
+1、查找group名字
+
+			后台路径:/browse/byGroup
+			前端传入：NextPageNum:1,
+			后台返回
+					GroupDetail[ 
+						{"gid":42,			//组id
+						 "groupName":"werwer"},      	//组名称
+						{"gid":37,"groupName":"CNHPP-973A-Digestive },
+						...
+						]
+					SumProject //总页数
+					NextPageNum 下一页
+
+
+2、通过group查找项目
+
+		后台路径：/browse/byGroup/project?GroupId=231&ProjectNum=10//前面是项目名字，后面是加载该类下多少条，第一次前面10条，后面是20条
+		前端传入：GroupId：1    // 组id
+				ProjectNum：10  //点击byGroup显示10条，点击more加10条
+		
+		后台返回
+				ProjectDetail[
+						{"date":1402416000000,		//日期  (后台已经排序 默认顺序降序（现在-过去）) 
+						 "pid":132,			//项目id
+						 "ptitle":"... "},		//项目名称
+						{"date":1400428800000,"pid":131,"ptitle":"Proteome..."},
+						...
+						]
+				more:true//表示是否还有更多的项目
+
+
+
+
+
+----------BySpecies/Tissue/CellType/Disease-------------------------------------------------------------------------------
+
+1、只查询出相关分类(没有项目)
+
+		后台路径：/browse/BySTTD?type=species&NextPageNum=1
+		前端传入：type：species    //类型（物种，组织，细胞类型，疾病类型）
+				NextPageNum：1
+		
+		后台返回：
+				STTDDetail[
+					{"species":"Homo sapiens"},		//分类名称
+					{"species":"artificial sequences"},
+					{"species":"Mus musculus"},
+					...
+				]
+				SumProject //总页数
+				NextPageNum 下一页
+		}
+		
+
+2、根据type查出项目
+
+			后台路径：/browse/BySTTD/project?type=species&STTDName=Homo sapiens&ProjectNum=10//type是类型，STTD后面传入类型具体分类，后面是条数
+			前端传入：type：species		//类型
+					STTDName：Homo sapiens	  //该类型的详细名称
+					ProjectNum：10		//点击类型的详细名称时显示10条项目，点击more加10条
+			
+			后台返回 
+					ProjectDetail[
+					  	 {	"date":1379088000000, 			//日期  (后台已经排序 默认顺序降序（现在-过去）) 
+							"pid":16,				//项目id
+							"ptitle":"French Liver Proteome"}	//项目名称
+					  	 {"date":1379088000000,"pid":18,"ptitle":"Human Liver Organelle Proteome"}
+					   	 ...
+					]
+					more:true//表示是否还有更多的项目
+
+
+
+
+----------任意点击子项目，到 Project.jsp 页面:--------------------------------------------------------------------------------------
+
+1.根据项目id查询项目信息和子项目信息
+
+			后台路径：/browse/byProject/project?nowPage=1&pid=14
+			前端传入：nowPage:1
+					pid:14
+					
+			页面跳转：从 iProx_browse.jsp 页面跳转到 Project.jsp 页面 
+			         
+			后台返回：
+					json字符串对象：projectAll
+					    "projectDetail": [
+	       						 "group": {
+	           					 		"gid": 3,
+	           					 		"groupName": "Chinese liver proteome project Group"
+	       						  },
+	       						 "project": {
+	       						 		  "changeid": "asldkf",
+	           							  "contactinformation": "majie.email@gmail.com",
+	          							  "contributor": "Prof. Xiaohong Qian and Prof. Ying Jiang",
+	          							  "description": "Human Fetal Liver Proteome dataset (CNHLPP)",
+								          "institution": "Beijing Proteome Research Center",
+								          "pid": 14,
+								          "ptag": "human fetal liver, proteome",
+								          "ptitle": "Fetal Liver Proteome",
+								          "pubmedid": "16815949",
+								          "reference": "A dataset of human fetal liver proteome identified by subcellular fractionation and multiple protein separation and identification technology.",
+								          "status": 1,
+								          "submitted": 1
+	        					  }
+		    			]
+		    			"subProjectCount": 17,
+		    			
+		    			"subProjectDetail": [
+							      {		            
+					           		"peptideCount": 34,
+					            	"proteinCount": 9,
+					            	"spectrumCount": 34,
+					            	"subProject": {
+					                "celltype": "",
+					                "details": "gfsd",
+					                "disease": "",
+					                "goterm": "",
+					                "species": "Homo sapiens",
+					                "subid": 22,
+					                "subtitle": "Fetal Liver Proteome HFL_01",
+					                "tissue": "liver"
+            					  },      	
+							   	 ......
+						]
+						"nowPage": 1
+		    			"pageNum": 1
+
+  
+
+
+
+
+
+

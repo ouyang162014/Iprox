@@ -1,0 +1,415 @@
+
+----------By Protein:--------------------------------------------------------------------------------------
+
+1.点击蛋白质标签，得到子项目下所有蛋白质
+	
+			 访问路径：/protein/selectAll     
+			 前端传入：NextPageNum:1,
+					 subId:2
+			 后台返回:
+				   AllProtein[   
+           			  {<"protein":
+              			 	 "coverage": 0,
+               				 "distinct_peptides": 22,
+               				 "group_id": 0,
+              			     "peptides": 39,
+              			     "pi": 0,
+              			     "protein": "Q15149",
+               				 "protein_id": 1,
+               				 "ptms": 5,
+               				 "status": "error",
+               				 "threshold": 24>,
+           			   <"subProject": 
+                			 "subid": 2,
+               				 "subtitle": "LTQ-Orbitrap control dataset">},
+               			...	 
+					]
+				   SumPage //总页数
+				   NextPageNum //下一页
+
+
+2.点击蛋白质，显示该蛋白质下的肽段，默认选中第一条蛋白质
+
+			访问路径：/peptide/selectPeptideByProteinId
+			前端传入值： NextPageNum:1,
+					  proteinId(蛋白质ID)：1
+			后台返回:
+					{
+					    "NextPageNum": 2,
+					    "SumPage": 2,
+					    "peptideByProteinId": [
+					        {
+					            "peptide": {
+					                "charge": 2,
+					                "cutting_site": 0,//此字段无用，无视掉
+					                "delta_m_z": 0.00579,
+					                "identification_id": 0,
+					                "length": 6,
+					                "lons": 5,
+					                "mascot_score": 29.54,
+					                "modifications": "00000000",
+					                "peptide": "FLSDFR",
+					                "peptide_id": 0,
+					                "pi": 0.013134,
+					                "precursor_m_z": 392.703,
+					                "psm": 0,
+					                "start": 1344,
+					                "stop": 1349
+					            },
+					            "protein": {	//protein对象中，只有protein_id有用，无视其余字段。
+					                "coverage": 0,
+					                "distinct_peptides": 0,
+					                "group_id": 0,
+					                "peptides": 0,
+					                "pi": 0,
+					                "protein_id": 1,
+					                "ptms": 0,
+					                "threshold": 0
+					            },
+					            "spectrum": {	//spectrum对象中，只有spectrum_id有用，无视其余字段
+					                "charge": 0,
+					                "identified": 0,
+					                "ms_level": 0,
+					                "peaks": 0,
+					                "precursor_m_z": 0,
+					                "spectrum_id": 0,
+					                "sum_of_intensity": 0
+					            }
+					    },
+					        ...
+       					]
+       				}
+					
+				
+				
+				
+				
+----------By Peptide:--------------------------------------------------------------------------------------
+
+1.点击肽段标签，得到子项目下所有肽段（返回的肽段序列不同，肽段信息包含所属蛋白质名称）
+
+			   访问路径：/peptide/selectAll  根据子项目分页查找所有肽段
+			   前端传入： NextPageNum:1
+					 		subId:2
+			   后台返回：
+					 {
+					    "NextPageNum": 2,
+					    "pageNum": 3,
+					    "peptides": [
+					        {
+					            "peptide": {	//peptide对象中只有peptide,modifications,psm,length,pi,delta_m_z字段有用，其余请无视
+					                "charge": 0,
+					                "cutting_site": 0,
+					                "delta_m_z": 0,
+					                "identification_id": 0,
+					                "length": 17,
+					                "lons": 0,
+					                "mascot_score": 0,
+					                "modifications": "100000000000000000",
+					                "peptide": "AAQDSFAANWGVMVSHR",
+					                "peptide_id": 0,
+					                "pi": 6.79,
+					                "precursor_m_z": 0,
+					                "psm": 1,
+					                "start": 0,
+					                "stop": 0
+					            },
+					            "protein": {	//protein对象中只有protein与protein_id有用，其余请无视
+					                "coverage": 0,
+					                "distinct_peptides": 0,
+					                "group_id": 0,
+					                "peptides": 0,
+					                "pi": 0,
+					                "protein": "Q15149", 	//这是蛋白质名称，用于页面显示
+					                "protein_id": 1,	//这是蛋白质id，用于进一步的查询时作为传入参数 
+					                "ptms": 0,
+					                "threshold": 0
+					            },
+					            "subProject": {
+					                "subid": 2,
+					                "subtitle": "LTQ-Orbitrap control dataset"
+					            }
+					        },
+					        ...
+					     ]
+					 }
+					
+					
+2.点击一个肽段序列，根据该序列分页查找该序列下所有肽段，默认选中第一个序列下的肽段信息 (肽段信息中包含所属蛋白质名称)	
+			
+			 访问路径：/peptide/selectPeptideByPeptide  
+			 前端传入：
+			  		NextPageNum:1, 
+			  	    peptide(肽段序列)：GITWGEETLMEYLENPK
+			 后台返回：								  
+					{
+						    "NextPageNum": 2,
+						    "PeptideDetail": [
+						        {
+						            "peptide": {
+						                "charge": 3,
+						                "cutting_site": 0,	//该字段无用，请无视
+						                "delta_m_z": -0.00579,
+						                "fit": "Unknown",
+						                "identification_id": 9,
+						                "length": 17,
+						                "lons": 39,
+						                "mascot_score": 43.33,
+						                "modifications": "100000000000000010",
+						                "peptide": "GITWGEETLMEYLENPK",
+						                "peptide_id": 1,
+						                "pi": 4.09,
+						                "precursor_m_z": 766.724,
+						                "psm": 2,
+						                "start": 57,
+						                "stop": 73
+						            },
+						            "protein": {	//protein对象中只有protein_id有用，其余无视
+						                "coverage": 0,
+						                "distinct_peptides": 0,
+						                "group_id": 0,
+						                "peptides": 0,
+						                "pi": 0,
+						                "protein": "Q15149",
+						                "protein_id": 1,
+						                "ptms": 0,
+						                "threshold": 0
+						            },
+						            "spectrum": {	//spectrum对象中只有spectrum_id有用，其余无视
+						                "charge": 0,
+						                "identified": 0,
+						                "ms_level": 0,
+						                "peaks": 0,
+						                "precursor_m_z": 0,
+						                "spectrum_id": 1,
+						                "sum_of_intensity": 0
+						            }
+						        },
+						        ...
+						     ]
+						 }   
+       
+
+
+----------By Peptide:--------------------------------------------------------------------------------------
+
+1.点击Spetrum标签，得到该子项目下所有质谱图
+
+			后台路径：/spectrum/selectAll
+			前端传入：subId:2
+					NextPageNum:1	
+			后台返回：
+					{
+						"NextPageNum": 2,
+					    "SumPage": 4,
+					    "speList": [
+					        {
+					            "spectrum": {
+					                "charge": 0,
+					                "identified": 0,
+					                "ms_level": 2,
+					                "peaks": 39,
+					                "precursor_m_z": 394.316399,
+					                "spectrum_id": 1,
+					                "sum_of_intensity": 6192590
+					            },
+					            "subProject": {
+					                "subid": 2,
+					                "subtitle": "LTQ-Orbitrap control dataset"
+					            }
+					        },
+					        ...
+					        ]
+					}
+	
+2.点击肽段，得到该肽段的质谱图的图，默认显示第一条肽段的图
+
+			后台路径：/spectrum/selectSpectrumViewByPepId
+			前端传入：peptide_id:2
+			后台返回：
+					
+3.根据质谱图id得到质谱图的图
+					
+			后台路径：/spectrum/selectSpectrumViewBySpectrumId
+			前端传入：spectrumId:1
+			后台返回：
+						{
+					    "name": "Name: DGEAGAQGPPGPAGPAGER/2",
+					    "spectrumView": [
+					        {
+					            "infos": [
+					                "b3:-0.451"
+					            ],
+					            "tag": "b3+[H2O]",
+					            "x": 283.64,
+					            "y": 314
+					        },
+					        {
+					            "infos": [
+					                "y2:-0.091"
+					            ],
+					            "tag": "y2+",
+					            "x": 304.071,
+					            "y": 309
+					        },
+		
+----------By Summery Charts:--------------------------------------------------------------------------------------
+
+1.得到图一的数据
+
+			后台路径：peptide/getView1?subId=2
+			前端传入：subId：2
+			后台返回：
+					{
+				    "deltaRatio": {
+				        "-0.0011": 0.333,
+				        "-0.001192": 0.333,
+				        ...
+				        "9.3E-5": 0.333
+					    }
+					}
+					
+					
+2.得到图二的数据
+
+			后台路径：protein/getView2?subId=2
+			前端传入：subId：2
+			后台返回：
+					{
+					    "byPeptideCount": {
+					        "1": 1,
+					        "2": 2,
+					        "3": 1,
+					        "4": 1,
+					        "5": 1,
+					        "than5": 10
+					    },
+					    "countRatio": {
+					        "ratio1": 0.06,
+					        "ratio2": 0.13,
+					        "ratio3": 0.06,
+					        "ratio4": 0.06,
+					        "ratio5": 0.06,
+					        "ratioThan5": 0.63
+					    }
+					}
+2.得到图三的数据
+
+			后台路径：peptide/getView3?subId=35
+			前端传入：subId：35
+			后台返回：
+			{
+			"byCuttingSiteCount":{
+			"0":0,
+			"1":1,
+			"2":1,
+			"3":1,
+			"than3":1
+			},
+			"countRatio":{
+			"ratio0":0.00,
+			"ratio1":0.25,
+			"ratio2":0.25,
+			"ratio3":0.25,
+			"ratioThan3":0.25
+			}
+			}
+3.得到图六的数据
+			
+			后台路径：peptide/getView6?subId=2
+			前端传入：subId：2
+			后台返回：
+
+					{
+			    "delta_precursorMZRatio": {
+			        "-0.0011": 0.0328,
+			        "-0.001192": 0.0164,
+			        "-0.001261": 0.0164,
+			        "-0.0023": 0.0164,
+			        "-0.002351": 0.0164,
+			        "-0.003039": 0.0164,
+			        "-0.003187": 0.0164,
+			        "-0.003342": 0.0164,
+			        "-0.004185": 0.0164,
+			        "-0.00579": 0.0328,
+			        "-0.0078": 0.0164,
+			        "-0.009334": 0.0164,
+			        "-0.010452": 0.0164,
+			        "-0.010828": 0.0164,
+			        "-0.010926": 0.0164,
+			        "-0.010969": 0.0164,
+			        "-0.011": 0.0164,
+			        "-0.011942": 0.0164,
+			        "-1.93E-4": 0.0164,
+			        "-2.11E-4": 0.0164,
+			        "-2.17E-4": 0.0164,
+			        "-3.59E-4": 0.0164,
+			        "-4.06E-4": 0.0164,
+			        "-4.39E-4": 0.0164,
+			        "-4.64E-4": 0.0164,
+			        "-5.01E-4": 0.0164,
+			        "-6.4E-5": 0.0164,
+			        "-7.6E-5": 0.0164,
+			        "-8.12E-4": 0.0164,
+			        "-9.6E-5": 0.0164,
+			        "-9.84E-4": 0.0164,
+			        "0.001301": 0.0164,
+			        "0.0046": 0.0164,
+			        "0.0054": 0.0164,
+			        "0.00579": 0.0492,
+			        "0.010574": 0.0164,
+			        "0.011338": 0.0164,
+			        "0.012": 0.0164,
+			        "0.0253": 0.0164,
+			        "1.02E-4": 0.0164,
+			        "1.69E-4": 0.0164,
+			        "1.8E-5": 0.0164,
+			        "2.22E-4": 0.0164,
+			        "2.28E-4": 0.0164,
+			        "2.8E-5": 0.0164,
+			        "3.27E-4": 0.0164,
+			        "3.86E-4": 0.0164,
+			        "3.8E-4": 0.0164,
+			        "3.91E-4": 0.0164,
+			        "4.31E-4": 0.0164,
+			        "5.31E-4": 0.0164,
+			        "5.42E-4": 0.0164,
+			        "7.37E-4": 0.0164,
+			        "7.41E-4": 0.0164,
+			        "8.92E-4": 0.0164,
+			        "8.9E-5": 0.0164,
+			        "9.3E-5": 0.0164
+			    }
+			}
+			
+4.得到图七的数据
+		
+			后台路径：spectrum/getView7?subId=2
+			前端传入：subId：2
+			后台返回：
+			
+							{
+				    "scopes": {
+				        "scope1": 59,
+				        "scope10": 1,
+				        "scope2": 1,
+				        "scope3": 0,
+				        "scope4": 0,
+				        "scope5": 0,
+				        "scope6": 0,
+				        "scope7": 0,
+				        "scope8": 0,
+				        "scope9": 0
+				    }
+				}
+5.得到图五的数据	
+				后台路径：spectrum/getView5?subId=2
+				前端传入：subId：2
+				后台返回：
+				
+						{
+						    "1": 2,
+						    "2": 2,
+						    "3": 3,
+						    "more7": 0
+						}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!-- xiezhaodong -->
+<mapper namespace="cn.cqupt.iprox.dao.GroupDao">
+
+	<!-- 分页查询群组 -->
+	<select id="getGroupByPage" resultType="cn.cqupt.iprox.model.po.Group" parameterType="int">
+	   SELECT gid,groupname from t_group  ORDER BY createtime desc limit #{rows},20
+	   <!--默认每页20条 -->
+	</select>
+	
+	<!-- 查询组的总数 -->
+	<select id="getGroupCount" resultType="int">
+	   select count(*) from t_group
+	</select>
+	
+	
+	
+	
+</mapper>
